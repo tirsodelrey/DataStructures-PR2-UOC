@@ -105,7 +105,7 @@ public class File implements Comparable<File> {
     public SportEvent newSportEvent() {
 
         SportEvent sportEvent = new SportEvent(this.eventId, this.description, this.type,
-                this.startDate, this.endDate, this.max, this);
+                this.startDate, this.endDate, this.max, this, this.organization);
         this.organization.addEvent(sportEvent);
 
         return sportEvent;

@@ -4,11 +4,14 @@ import edu.uoc.ds.adt.sequential.LinkedList;
 import edu.uoc.ds.adt.sequential.List;
 import edu.uoc.ds.traversal.Iterator;
 
-public class OrganizingEntity {
+import java.util.Comparator;
+
+public class OrganizingEntity implements Comparable<OrganizingEntity>{
     private String id;
     private String description;
     private String name;
     private List<SportEvent> events;
+    public static final Comparator<OrganizingEntity> COMP_ATTENDERS =  (OrganizingEntity o1, OrganizingEntity o2)->Double.compare(o2.numAttenders(), o1.numAttenders());
 
     public OrganizingEntity(String id, String name, String description) {
         this.id = id;
@@ -55,5 +58,21 @@ public class OrganizingEntity {
 
     public Iterator<SportEvent> sportEvents() {
         return events.values();
+    }
+
+    //added
+    public int numAttenders() {
+        int numAttenders = 0;
+        Iterator it = events.values();
+        while (it.hasNext()){
+            SportEvent event = (SportEvent) it.next();
+            numAttenders += event.numAttenders();
+        }
+        return numAttenders;
+    }
+
+    @Override
+    public int compareTo(OrganizingEntity o) {
+        return Double.compare(o.numAttenders(), numAttenders());
     }
 }

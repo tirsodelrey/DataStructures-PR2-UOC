@@ -1,5 +1,6 @@
 package uoc.ds.pr.model;
 
+import edu.uoc.ds.adt.helpers.Position;
 import edu.uoc.ds.adt.nonlinear.HashTable;
 import edu.uoc.ds.adt.nonlinear.PriorityQueue;
 import edu.uoc.ds.adt.sequential.LinkedList;
@@ -7,6 +8,7 @@ import edu.uoc.ds.adt.sequential.List;
 import edu.uoc.ds.adt.sequential.Queue;
 import edu.uoc.ds.adt.sequential.QueueArrayImpl;
 import edu.uoc.ds.traversal.Iterator;
+import edu.uoc.ds.traversal.Traversal;
 import uoc.ds.pr.SportEvents4Club;
 
 import java.time.LocalDate;
@@ -16,7 +18,8 @@ import static uoc.ds.pr.SportEvents4Club.MAX_NUM_ENROLLMENT;
 
 public class SportEvent implements Comparable<SportEvent>{
     public static final Comparator<SportEvent> CMP_V = (se1, se2)->Double.compare(se1.rating(), se2.rating());
-    public static final Comparator<String> CMP_K = (k1, k2)-> k1.compareTo(k2);
+    //public static final Comparator<String> CMP_K = (k1, k2)-> k1.compareTo(k2);
+    //public static final Comparator<SportEvent> CMP_A = (se1, se2)->Integer.compare(se1.numAttenders(), se2.numAttenders());
 
     private String eventId;
     private String description;
@@ -30,9 +33,11 @@ public class SportEvent implements Comparable<SportEvent>{
     private Queue<Player> enrollments;
     private Queue<Player> substitues;
     private HashTable<String, Attender> attenders;
+    private List<Worker> workers;
+    private OrganizingEntity organizingEntity;
 
     public SportEvent(String eventId, String description, SportEvents4Club.Type type,
-                      LocalDate startDate, LocalDate endDate, int max, File file) {
+                      LocalDate startDate, LocalDate endDate, int max, File file, OrganizingEntity organizingEntity) {
 
         setEventId(eventId);
         setDescription(description);
@@ -41,13 +46,18 @@ public class SportEvent implements Comparable<SportEvent>{
         setType(type);
         setMax(max);
         setFile(file);
+        setOrganizingEntity(organizingEntity);
         this.enrollments = new QueueArrayImpl<>(MAX_NUM_ENROLLMENT);
         this.substitues = new PriorityQueue<>(Player.CMP);
         this.ratings = new LinkedList<>();
         this.attenders = new HashTable<>();
+        this.workers = new LinkedList<>();
 
     }
-
+    //Added
+    private void setOrganizingEntity(OrganizingEntity organizingEntity) {
+        this.organizingEntity = organizingEntity;
+    }
 
     public String getEventId() {
         return eventId;
@@ -139,7 +149,7 @@ public class SportEvent implements Comparable<SportEvent>{
     }
 
     public boolean isFull() {
-        return (enrollments.size()>=max);
+        return (enrollments.size() + attenders.size() >=max);
     }
 
     public int numPlayers() {
@@ -157,6 +167,42 @@ public class SportEvent implements Comparable<SportEvent>{
 
     //added
     public OrganizingEntity getOrganizingEntity() {
-        return null;
+        return organizingEntity;
+    }
+
+    public int numAttenders() {
+        return attenders.size();
+    }
+
+    public Attender getAttender(String phone) {
+        return attenders.get(phone);
+    }
+
+    public void addAttender(String phone, Attender attender){
+        attenders.put(phone, attender);
+    }
+
+    public Boolean workerExists(String dni){
+        Traversal<Worker> it = workers.positions();
+        Position<Worker> pos = null;
+        Boolean exists = false;
+
+        while(it.hasNext() && !exists){
+            pos = it.next();
+            exists = pos.getElem().sameAs(dni);
+        }
+        return exists;
+    }
+    //added
+    public void addWorker(Worker wk) {
+        workers.insertEnd(wk);
+    }
+
+    public int getNumWorkers() {
+        return workers.size();
+    }
+
+    public Iterator<Attender> getAttenders(){
+        return attenders.values();
     }
 }
