@@ -18,8 +18,6 @@ import static uoc.ds.pr.SportEvents4Club.MAX_NUM_ENROLLMENT;
 
 public class SportEvent implements Comparable<SportEvent>{
     public static final Comparator<SportEvent> CMP_V = (se1, se2)->Double.compare(se1.rating(), se2.rating());
-    //public static final Comparator<String> CMP_K = (k1, k2)-> k1.compareTo(k2);
-    //public static final Comparator<SportEvent> CMP_A = (se1, se2)->Integer.compare(se1.numAttenders(), se2.numAttenders());
 
     private String eventId;
     private String description;
@@ -31,7 +29,7 @@ public class SportEvent implements Comparable<SportEvent>{
     private List<Rating> ratings;
     private double sumRating;
     private Queue<Player> enrollments;
-    private Queue<Player> substitues;
+    private Queue<Enrollment> substitues;
     private HashTable<String, Attender> attenders;
     private List<Worker> workers;
     private OrganizingEntity organizingEntity;
@@ -48,7 +46,7 @@ public class SportEvent implements Comparable<SportEvent>{
         setFile(file);
         setOrganizingEntity(organizingEntity);
         this.enrollments = new QueueArrayImpl<>(MAX_NUM_ENROLLMENT);
-        this.substitues = new PriorityQueue<>(Player.CMP);
+        this.substitues = new PriorityQueue<>(Enrollment.CMP_E);
         this.ratings = new LinkedList<>();
         this.attenders = new HashTable<>();
         this.workers = new LinkedList<>();
@@ -157,8 +155,8 @@ public class SportEvent implements Comparable<SportEvent>{
     }
 
 
-    public void addEnrollmentAsSubstitute(Player player) {
-        substitues.add(player);
+    public void addEnrollmentAsSubstitute(Enrollment enrollment) {
+        substitues.add(enrollment);
     }
 
     public int getNumSubstitutes() {
@@ -204,5 +202,21 @@ public class SportEvent implements Comparable<SportEvent>{
 
     public Iterator<Attender> getAttenders(){
         return attenders.values();
+    }
+
+    public boolean hasWorkers() {
+        return (workers.size() > 0);
+    }
+
+    public Iterator<Worker> getWorkers() {
+        return workers.values();
+    }
+
+    public boolean hasSubstitutes() {
+        return (substitues.size() > 0);
+    }
+
+    public Iterator<Enrollment> getSubstitutes() {
+        return substitues.values();
     }
 }

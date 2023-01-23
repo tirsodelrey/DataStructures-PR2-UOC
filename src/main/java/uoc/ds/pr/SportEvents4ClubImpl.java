@@ -128,7 +128,7 @@ public class SportEvents4ClubImpl implements SportEvents4Club {
             sportEvent.addEnrollment(player);
         }
         else {
-            sportEvent.addEnrollmentAsSubstitute(player);
+            sportEvent.addEnrollmentAsSubstitute(new Enrollment(player));
             throw new LimitExceededException();
         }
         updateMostActivePlayer(player);
@@ -262,6 +262,7 @@ public class SportEvents4ClubImpl implements SportEvents4Club {
 
             if (!worker.getRoleId().equals(roleId)) {
                 worker.getRole().removeWorker(worker);
+                worker.setRoleId(roleId);
                 worker.setRole(role);
             }
         }
@@ -292,12 +293,24 @@ public class SportEvents4ClubImpl implements SportEvents4Club {
 
     @Override
     public Iterator<Worker> getWorkersBySportEvent(String eventId) throws SportEventNotFoundException, NoWorkersException {
-        return null;
+        SportEvent se = getSportEvent(eventId);
+        if(se == null){
+            throw new SportEventNotFoundException();
+        }
+        if(!se.hasWorkers()){
+            throw new NoWorkersException();
+        }
+        Iterator<Worker> workers = se.getWorkers();
+        return workers;
     }
 
     @Override
     public Iterator<Worker> getWorkersByRole(String roleId) throws NoWorkersException {
-        return null;
+        Role r = getRole(roleId);
+        if(!r.hasWorkers()){
+            throw new NoWorkersException();
+        }
+        return r.getWorkers();
     }
 
     @Override
@@ -311,7 +324,15 @@ public class SportEvents4ClubImpl implements SportEvents4Club {
 
     @Override
     public Iterator<Enrollment> getSubstitutes(String eventId) throws SportEventNotFoundException, NoSubstitutesException {
-        return null;
+        SportEvent se = getSportEvent(eventId);
+        if(se == null){
+            throw new SportEventNotFoundException();
+        }
+        if(!se.hasSubstitutes()){
+            throw new NoSubstitutesException();
+        }
+        Iterator<Enrollment> substitutes = se.getSubstitutes();
+        return substitutes;
     }
 
     @Override
@@ -524,7 +545,7 @@ public class SportEvents4ClubImpl implements SportEvents4Club {
 
     @Override
     public int numWorkers() {
-        return 0;
+        return workers.size();
     }
 
     @Override

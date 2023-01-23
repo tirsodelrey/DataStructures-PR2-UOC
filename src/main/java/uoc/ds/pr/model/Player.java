@@ -9,15 +9,13 @@ import uoc.ds.pr.util.LevelHelper;
 import java.time.LocalDate;
 import java.util.Comparator;
 
-public class Player implements Comparable<Player> {
-    public static final Comparator<Player> CMP = (Player p1, Player p2)->p1.compareTo(p2);
+public class Player {
     private String id;
     private String name;
     private String surname;
     private List<SportEvent> events;
     private List<Rating> ratings;
     private LocalDate birthday;
-    private SportEvents4Club.Level level;
 
     public Player(String idUser, String name, String surname, LocalDate birthday) {
         this.setId(idUser);
@@ -105,9 +103,4 @@ public class Player implements Comparable<Player> {
         return LevelHelper.getLevel(numRatings());
     }
 
-    @Override
-    public int compareTo(Player p) {
-        int comp = p.getLevel().compareTo(this.getLevel());
-        return comp;
-    }
 }

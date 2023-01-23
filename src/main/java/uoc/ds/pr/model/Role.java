@@ -6,7 +6,6 @@ import edu.uoc.ds.adt.sequential.LinkedList;
 import edu.uoc.ds.adt.sequential.List;
 import edu.uoc.ds.traversal.Iterator;
 import edu.uoc.ds.traversal.Traversal;
-import edu.uoc.ds.traversal.TraversalArrrayImpl;
 
 public class Role {
     private String roleId;
@@ -58,8 +57,15 @@ public class Role {
         }
     }
 
-    //added
     public int getNumWorkers() {
        return workers.size();
+    }
+
+    public boolean hasWorkers() {
+        return (workers.size() > 0);
+    }
+
+    public Iterator<Worker> getWorkers() {
+        return workers.values();
     }
 }
