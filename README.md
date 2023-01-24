@@ -1,4 +1,4 @@
-# ****DS - PR2 - Tirso del Rey Gumb - 2022/23
+# DS - PR2 - Tirso del Rey Gumb - 2022/23
 
 ## Introducción
 
@@ -45,22 +45,4 @@ Se implementó en el módulo `util` la clase `LevelHelper` que permite determina
 
 Esto se implementó mediante el método `getLevel()`:
 
-    public static SportEvents4Club.Level getLevel(int numRatings){
-        if (numRatings < 2){
-            return SportEvents4Club.Level.ROOKIE;
-        }
-        if (numRatings >= 2 && numRatings < 5){
-            return SportEvents4Club.Level.PRO;
-        }
-        if (numRatings >= 5 && numRatings < 10){
-            return SportEvents4Club.Level.EXPERT;
-        }
-        if (numRatings >= 10 && numRatings < 15){
-            return SportEvents4Club.Level.MASTER;
-        }
-        if (numRatings >= 15){
-            return SportEvents4Club.Level.LEGEND;
-        }
-
-        return null;
-    }
+    public static SportEvents4Club.Level getLevel(int numRatings){}
